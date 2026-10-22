@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>امتحان سلامة الغذاء</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--tx:#1a1d23;--mu:#5d6572;--bd:#d9dde3;--ac:#1d6f5c;--ok:#1b7f3b;--okb:#e3f4e8;--no:#b3261e;--nob:#fbe7e5;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14171c;--card:#1d2127;--tx:#eceff3;--mu:#9aa3b0;--bd:#343a44;--ac:#4fc3a1;--ok:#6fd48c;--okb:#1d3a27;--no:#ff8a80;--nob:#442321}}
+:root[data-theme="dark"]{--bg:#14171c;--card:#1d2127;--tx:#eceff3;--mu:#9aa3b0;--bd:#343a44;--ac:#4fc3a1;--ok:#6fd48c;--okb:#1d3a27;--no:#ff8a80;--nob:#442321}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:"Segoe UI",Tahoma,Arial,sans-serif;line-height:1.7}
+main{max-width:720px;margin:0 auto;padding:16px}
+h1{font-size:1.4rem;margin:8px 0}h2{font-size:1.1rem;color:var(--ac);margin:24px 0 8px}
+.mu{color:var(--mu)}
+.q{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px;margin:10px 0}
+.q p{margin:0 0 8px;font-weight:600}
+label{display:block;padding:8px 10px;border:1px solid var(--bd);border-radius:8px;margin:6px 0;cursor:pointer}
+label:has(input:checked){border-color:var(--ac);background:color-mix(in srgb,var(--ac) 12%,transparent)}
+input{margin-inline-end:8px}
+button{background:var(--ac);color:#fff;border:0;border-radius:10px;padding:12px 24px;font-size:1rem;cursor:pointer;font-family:inherit}
+:root:not([data-theme="light"]) button{color:#0d1a15}
+.bar{position:sticky;bottom:0;padding:10px 0;background:var(--bg);text-align:center}
+.score{font-size:1.3rem;font-weight:700;text-align:center;padding:14px;background:var(--card);border:1px solid var(--bd);border-radius:12px}
+.ok{background:var(--okb);border-color:var(--ok)!important}.no{background:var(--nob);border-color:var(--no)!important}
+.fb{font-size:.9rem;margin-top:6px}
+.tw{height:8px;background:var(--bd);border-radius:6px;overflow:hidden;margin:6px 0}#tb{height:100%;width:100%;background:var(--ac);transition:width 1s linear}#tb.low{background:var(--no)}
+#tt{font-weight:700;text-align:center;margin-bottom:6px}
+</style>
+</head>
+<body>
+<main>
+<h1>امتحان سلامة الغذاء</h1>
+<p class="mu">الجزء الأول: اختيار من متعدد (14 سؤال) — الجزء الثاني: صح وغلط (8 أسئلة). لكل سؤال درجة واحدة. كل سؤال يظهر لوحده لمدة 30 ثانية فقط، ولا يمكن الرجوع للسؤال السابق.</p>
+<div id="meta" class="mu"></div>
+<div class="tw"><div id="tb"></div></div>
+<div id="tt"></div>
+<div id="start" class="q"><p>اكتب اسمك الكامل قبل ما تبدأ</p><input id="nm" type="text" maxlength="60" placeholder="الاسم الكامل" autocomplete="name" style="width:100%;margin:0;padding:10px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx);font:inherit"><div id="st" class="fb"></div><div style="margin-top:10px"><button id="go" disabled>ابدأ الامتحان</button></div></div>
+<div id="adm"></div>
+<div id="app"></div>
+<div class="bar"><button id="nxt" style="display:none">التالي</button></div>
+<div id="res"></div>
+</main>
+<script>
+var MC=[
+["أي مجموعة من الآتي تمثل أعراض التسمم الغذائي؟",["صداع فقط وكحة","قيء وإسهال وألم في البطن وارتفاع في الحرارة","ألم في الظهر وطنين في الأذن","حكة في العين فقط"],1],
+["لماذا نسجل درجة حرارة الثلاجات بشكل دوري؟",["لأنها إجراء شكلي","للتأكد أن الأغذية محفوظة في المدى الآمن واكتشاف أي عطل بسرعة","لتوفير الكهرباء فقط","لحساب عدد مرات فتح الباب"],1],
+["أي إجراء يمنع التلوث المتبادل بين الأطعمة؟",["استخدام نفس السكين والقطاعة للنيء والمطبوخ","تخزين الأطعمة النيئة فوق الجاهزة للأكل","فصل الأطعمة النيئة عن الجاهزة واستخدام أدوات منفصلة وتنظيفها","شطف الأدوات بالماء فقط بين الاستخدامين"],2],
+["ما درجة حرارة التجميد الصحيحة؟",["0 °م","-5 °م","-10 °م","-18 °م أو أقل"],3],
+["ما هو النطاق الخطر لدرجة الحرارة (الذي تنمو فيه البكتريا بسرعة)؟",["من 5 إلى 60 °م","من -18 إلى 0 °م","من 70 إلى 90 °م","من 0 إلى 5 °م"],0],
+["ما الترتيب الصحيح للثلاجة من الأعلى إلى الأسفل؟",["اللحوم النيئة في الأعلى والجاهز للأكل في الأسفل","الدواجن النيئة في الأعلى ثم الخضار","الأطعمة الجاهزة للأكل في الأعلى، وفي الأسفل الدواجن النيئة، وبينهما الأصناف بحسب درجة حرارة الطهي","لا يوجد ترتيب معين"],2],
+["ما أنواع المخاطر الغذائية الرئيسية؟",["بيولوجية وكيميائية وفيزيائية","حرارية وضوئية فقط","مادية وإعلانية","بيولوجية فقط"],0],
+["ما الفرق بين FIFO و FEFO؟",["لا يوجد فرق","FIFO يخرج الأقدم دخولاً أولاً، و FEFO يخرج الأقرب انتهاءً للصلاحية أولاً","FEFO يخرج الأحدث أولاً","FIFO يخص المجمدات فقط"],1],
+["ما الفرق بين Cleaning و Sanitizing؟",["هما نفس الشيء","Cleaning يقتل البكتريا، و Sanitizing يزيل الأتربة","Cleaning يزيل الأوساخ المرئية، و Sanitizing يخفض الميكروبات إلى مستوى آمن","Sanitizing يتم بالماء فقط"],2],
+["أي من الآتي من عوامل نمو البكتريا؟",["الغذاء والرطوبة والحرارة المناسبة والوقت","الجفاف والبرودة الشديدة","الحموضة العالية جداً والملح العالي","الضوء فقط"],0],
+["أي من الآتي من مسببات الحساسية الشائعة؟",["الأرز والملح","الحليب والبيض والفول السوداني والمكسرات","الماء والسكر","الخل والزيت"],1],
+["عند استلام الطلبية، ماذا يجب فحصه؟",["الشكل الخارجي للعلبة فقط","السعر فقط","درجة حرارة المنتج وسلامة العبوة وتاريخ الصلاحية ونظافة سيارة النقل","اسم السائق"],2],
+["ما البيانات التي يجب أن تتوفر على ملصق الغذاء (Food Label)؟",["اسم المنتج والمكونات ومسببات الحساسية وتاريخ الإنتاج والانتهاء وطريقة التخزين","اسم المنتج فقط","السعر فقط","صورة المنتج"],0],
+["ما الإجراء الصحيح إذا كانت درجة حرارة الثلاجة أعلى من الحد المسموح (5 °م)؟",["تجاهل الأمر","فتح الباب أكثر","التحقق من القراءة، ونقل الأغذية لثلاجة سليمة، وإبلاغ المسؤول، وتقييم الأغذية والتخلص من غير الآمن منها","إضافة مزيد من الأغذية"],2]
+];
+MC=[
+["أي وصف يمثل أعراض التسمم الغذائي النموذجية؟",["حمى عالية وطفح جلدي دون أي أعراض هضمية","غثيان وقيء وإسهال وتقلصات في البطن، وقد تصاحبها حمى","تورم في الوجه وضيق تنفس خلال دقائق من تناول الطعام","ألم في المفاصل وجفاف الجلد لأسابيع دون أعراض هضمية"],1],
+["ما السبب الأدق لتسجيل درجة حرارة الثلاجات بانتظام؟",["لأن ثبات الحرارة وحده يضمن خلو الغذاء من الميكروبات","لأن الثلاجة تعقّم الغذاء عندما تثبت حرارتها","لضبط الترموستات تلقائياً","لإثبات الالتزام وللكشف المبكر عن أي ارتفاع يسمح بنمو البكتريا قبل ظهور الفساد"],3],
+["أي إجراء هو الأنسب لمنع التلوث المتبادل؟",["استخدام نفس السكين بعد شطفه بالماء بين النيء والمطبوخ","الاكتفاء بمسح السطح بقطعة قماش مبللة بين النيء والجاهز","أدوات ولوحات تقطيع مخصصة لكل نوع، مع غسل اليدين وتنظيف وتطهير الأسطح بين المهام","تخزين اللحوم النيئة على الرفوف العليا لسهولة الوصول إليها"],2],
+["ما درجة حرارة التجميد المطلوبة للحفظ الآمن؟",["-12 °م","-18 °م أو أقل","-8 °م","-4 °م"],1],
+["ما النطاق الخطر الذي تتكاثر فيه البكتريا بسرعة؟",["من 0 إلى 5 °م","من 60 إلى 74 °م","من 20 إلى 37 °م فقط","من 5 إلى 60 °م"],3],
+["ما الترتيب الصحيح للثلاجة من الأعلى إلى الأسفل؟",["الجاهز للأكل أعلى، ثم الأسماك، ثم اللحوم الكاملة، ثم اللحوم المفرومة، والدواجن النيئة في الأسفل","اللحوم والدواجن النيئة أعلى والجاهز للأكل أسفل لسهولة التناول","الدواجن أعلى، ثم الأسماك، ثم الجاهز للأكل أسفل","الترتيب حسب حجم العبوة وليس حسب درجة حرارة الطهي"],0],
+["ما أنواع المخاطر الغذائية الرئيسية؟",["بيولوجية وحرارية وميكانيكية","كيميائية وفيزيائية وبيئية","بيولوجية وكيميائية وفيزيائية","بيولوجية وكيميائية ومالية"],2],
+["ما الفرق بين FIFO و FEFO؟",["FIFO يعتمد على تاريخ الصلاحية، و FEFO يعتمد على تاريخ الاستلام","FEFO للأغذية الجافة فقط، و FIFO للمبردة فقط","FIFO يصرف الأقدم استلاماً أولاً، و FEFO يصرف الأقرب انتهاءً أولاً حتى لو كان أحدث استلاماً","هما المبدأ نفسه بمسميين مختلفين"],2],
+["ما الفرق بين Cleaning و Sanitizing؟",["Cleaning يتم بالمطهر، و Sanitizing يتم بالمنظف","Sanitizing يسبق Cleaning دائماً","Sanitizing يبيد جميع الميكروبات والجراثيم المتبوغة تماماً","Cleaning يزيل الأوساخ والبقايا المرئية، و Sanitizing يخفض الميكروبات إلى مستوى آمن ويأتي بعده"],3],
+["أي مجموعة تمثل عوامل نمو البكتريا؟",["غذاء وحموضة مناسبة ودرجة حرارة مناسبة وزمن وأكسجين (للهوائية) ورطوبة","حرارة منخفضة وجفاف وحموضة عالية","ضوء ساطع وملح عالٍ وسكر عالٍ","برودة شديدة وغياب الماء"],0],
+["أي مما يلي ليس من مسببات الحساسية الغذائية الكبرى؟",["الفول السوداني","الأسماك","الأرز","الصويا"],2],
+["أي مما يلي يمثل معايير استلام الطلبية الصحيحة؟",["قبول المبرد حتى 10 °م إذا كانت العبوة سليمة","قبول المجمد إذا كان طرياً قليلاً لكن الصلاحية سارية","فحص تاريخ الصلاحية فقط لأنه أهم عنصر","المبرد 5 °م أو أقل، والمجمد -18 °م أو أقل دون علامات إذابة، وعبوة سليمة، وصلاحية سارية، وسيارة نظيفة"],3],
+["أي مجموعة تمثل البيانات المطلوبة على ملصق الغذاء؟",["اسم المنتج والمكونات (مع إبراز مسببات الحساسية) وتاريخ الإنتاج والانتهاء وظروف التخزين والوزن الصافي والجهة المصنعة","اسم المنتج والسعر والعلامة التجارية فقط","اسم المنتج والمكونات وتاريخ الإنتاج فقط","المكونات وطريقة الإعلان وبلد الاستيراد"],0],
+["ما الإجراء الصحيح إذا ارتفعت حرارة الثلاجة عن 5 °م؟",["نقل الغذاء للفريزر مباشرة لتعويض الارتفاع","ترك الغذاء حتى تعود الحرارة تلقائياً","تأكيد القراءة بميزان آخر، نقل الأغذية لثلاجة سليمة، إبلاغ المسؤول، تقييم مدة التعرض والتخلص مما تجاوز الحد الآمن، وتوثيق الإجراء","التخلص من كل المحتويات فوراً دون تقييم"],2]
+];
+var TF=[
+["يجوز إعادة تجميد المنتج بعد إذابته.",false],
+["يجوز استخدام الجوانتي بدلاً من غسل اليدين.",false],
+["يجب غسل اليدين بالماء والصابون لمدة 20 ثانية تقريباً، وبعد دورة المياه وبعد لمس الأطعمة النيئة.",true],
+["إذابة الأغذية على درجة حرارة الغرفة طريقة آمنة.",false],
+["إذابة الأغذية داخل الثلاجة من طرق الإذابة الآمنة.",true],
+["ترك الأغذية سريعة التلف على درجة حرارة الغرفة لفترة طويلة أمر آمن.",false],
+["الطهي الجيد يزيل خطر مسببات الحساسية.",false],
+["التبريد يوقف نمو جميع أنواع البكتريا تماماً.",false]
+];
+var T=30,cur=-1,sc=0,ans=[],tm,end,
+app=document.getElementById('app'),nxt=document.getElementById('nxt'),tb=document.getElementById('tb'),tt=document.getElementById('tt'),meta=document.getElementById('meta'),
+qs=MC.map(function(d){return{q:d[0],o:d[1],c:d[2],p:1}}).concat(TF.map(function(d){return{q:d[0],o:["صح","غلط"],c:d[1]?0:1,p:2}})),all=qs.length;
+function tick(){var l=Math.max(0,Math.ceil((end-Date.now())/1000));tt.textContent=l+' ثانية';tb.style.width=(l/T*100)+'%';tb.className=l<=10?'low':'';if(l<=0)next()}
+function show(){var x=qs[cur],h='<div class="q"><p>'+(cur+1)+'. '+x.q+'</p>';
+x.o.forEach(function(o,j){h+='<label><input type="radio" name="r" value="'+j+'">'+o+'</label>'});
+app.innerHTML=h+'</div>';meta.textContent='سؤال '+(cur+1)+' من '+all+' — '+(x.p==1?'اختيار من متعدد':'صح وغلط');
+nxt.textContent=cur==all-1?'إنهاء الامتحان':'التالي';tb.style.transition='none';tb.style.width='100%';void tb.offsetWidth;tb.style.transition='';
+end=Date.now()+T*1000;tick();clearInterval(tm);tm=setInterval(tick,250)}
+function next(){clearInterval(tm);if(cur>=0){var s=document.querySelector('input[name=r]:checked'),a=s?+s.value:-1;ans.push(a);if(a===qs[cur].c)sc++}
+cur++;if(cur>=all)return finish();show()}
+function finish(){setTimeout(saveResult,0);document.querySelector('.tw').style.display=tt.style.display=meta.style.display=nxt.style.display='none';app.innerHTML='';
+var h='<div class="score">النتيجة: '+sc+' من '+all+'</div><h2>مراجعة الإجابات</h2>';
+qs.forEach(function(x,i){var ok=ans[i]===x.c;h+='<div class="q '+(ok?'ok':'no')+'"><p>'+(i+1)+'. '+x.q+'</p><div class="fb">'+(ok?'إجابة صحيحة':(ans[i]<0?'لم تجب (انتهى الوقت). ':'إجابتك: '+x.o[ans[i]]+'. ')+'<br>الإجابة الصحيحة: '+x.o[x.c])+'</div></div>'});
+document.getElementById('res').innerHTML=h;window.scrollTo(0,0)}
+nxt.onclick=next;
+var db=null,isAdmin=false,saved=false,list=[],TW=document.querySelector('.tw'),
+nm=document.getElementById('nm'),st=document.getElementById('st'),go=document.getElementById('go'),stc=document.getElementById('start'),adm=document.getElementById('adm');
+TW.style.display=tt.style.display=meta.style.display='none';
+nm.oninput=function(){go.disabled=nm.value.trim().length<3};
+go.onclick=function(){nm.disabled=true;stc.style.display='none';adm.style.display='none';TW.style.display=tt.style.display=meta.style.display='';nxt.style.display='';cur=0;sc=0;ans=[];show()};
+function hs(s){var h=7;for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))%1679616;return h.toString(36)}
+function enc(o){var p=btoa(unescape(encodeURIComponent(JSON.stringify(o))));return 'FS.'+p+'.'+hs(p+'k9')}
+function dec(c){try{var a=c.trim().split('.');if(a[0]!=='FS'||a.length!==3||hs(a[1]+'k9')!==a[2])return null;return JSON.parse(decodeURIComponent(escape(atob(a[1]))))}catch(e){return null}}
+function saveResult(){if(isAdmin||saved)return;saved=true;var code=enc({n:nm.value.trim(),s:sc,t:all,d:Date.now()});
+document.getElementById('res').insertAdjacentHTML('afterbegin','<div class="q"><p>كود النتيجة</p><div class="fb">انسخ الكود ده وابعته للمسؤول عشان درجتك تتسجل.</div><textarea id="cd" readonly rows="3" style="width:100%;margin-top:8px;padding:8px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx);font:inherit;direction:ltr"></textarea><div style="margin-top:8px"><button id="cp">نسخ الكود</button></div></div>');
+var cd=document.getElementById('cd');cd.value=code;
+document.getElementById('cp').onclick=function(){cd.select();var b=this;try{navigator.clipboard.writeText(code).then(function(){b.textContent='تم النسخ'},function(){document.execCommand('copy');b.textContent='تم النسخ'})}catch(e){try{document.execCommand('copy');b.textContent='تم النسخ'}catch(e2){}}}}
+function render(){var t=document.getElementById('tbl'),rows=list.map(dec).filter(Boolean).sort(function(a,b){return b.d-a.d});t.innerHTML='';
+var hr=t.insertRow();['الاسم','الدرجة','النسبة','الوقت'].forEach(function(v){var c=document.createElement('th');c.textContent=v;c.style.cssText='padding:8px;text-align:start;border-bottom:2px solid var(--bd)';hr.appendChild(c)});
+rows.forEach(function(r){var tr=t.insertRow();[r.n,r.s+' / '+r.t,Math.round(r.s/r.t*100)+'%',new Date(r.d).toLocaleString('ar-EG')].forEach(function(v){var c=tr.insertCell();c.textContent=v;c.style.cssText='padding:8px;border-bottom:1px solid var(--bd)'})});
+document.getElementById('cnt').textContent='عدد النتائج المسجلة: '+rows.length}
+function persist(msg){var m=document.getElementById('msg');try{localStorage.setItem('fs_codes',JSON.stringify(list));render();m.textContent=msg||''}catch(e){m.textContent='تعذر الحفظ.'}}
+function showAdmin(){adm.innerHTML='<div class="q"><p>لوحة النتائج (محفوظة في هذا المتصفح)</p><div class="fb" id="cnt"></div><div style="overflow-x:auto"><table id="tbl" style="width:100%;border-collapse:collapse"></table></div></div><div class="q"><p>إضافة نتائج الطلاب</p><textarea id="pz" rows="5" placeholder="الصق أكواد الطلاب هنا، كود في كل سطر" style="width:100%;padding:8px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx);font:inherit;direction:ltr"></textarea><div class="fb" id="msg"></div><div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap"><button id="add">إضافة</button><button id="try">جرّب الامتحان كطالب</button><button id="clr">مسح كل النتائج</button></div></div>';
+render();
+document.getElementById('add').onclick=function(){var p=document.getElementById('pz'),a=p.value.split(/\s+/).filter(Boolean),bad=0,n=0;a.forEach(function(c){if(!dec(c))bad++;else if(list.indexOf(c)<0){list.push(c);n++}});p.value='';persist('اتضاف '+n+' نتيجة'+(bad?'، و'+bad+' كود غير صالح':''))};
+document.getElementById('clr').onclick=function(){if(confirm('تمسح كل النتائج المسجلة؟')){list=[];persist('اتمسحت النتائج')}};
+document.getElementById('try').onclick=function(){stc.style.display='';adm.style.display='none';st.textContent='وضع التجربة: مفيش كود نتيجة هيتسجل.';nm.oninput()}}
+window.onhashchange=function(){location.reload()};
+if(location.hash==='#admin'){isAdmin=true;stc.style.display='none';try{list=JSON.parse(localStorage.getItem('fs_codes')||'[]')}catch(e){}showAdmin()}
+</script>
+</body>
+</html>
